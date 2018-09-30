@@ -34,11 +34,72 @@ export abstract class MysqlModel {
    * @param row The row object returned from a database query
    * @param fieldMap The object -> database field map
    */
-  public mysqlCopyFromRow(row: Dictionary<any>, fieldMap: Dictionary<string>) {
-    Object.keys(fieldMap).forEach((key: string) => {
-      const mysqlField = fieldMap[key];
+  public mysqlCopyFromRow(row: Dictionary<any>) {
+    const constructor = <typeof MysqlModel>this.constructor;
+    const { _mysqlFields } = constructor;
+    Object.keys(_mysqlFields).forEach((key: string) => {
+      const mysqlField = _mysqlFields[key];
       this[key] = row[mysqlField];
     });
+  }
+
+  /**
+   * Saves the current model to database. Will INSERT if no ID is present (as defined
+   * by the `primaryKey` and UPDATE if it is. On INSERT, will update the object's ID
+   * as defined by `primaryKey`.
+   *
+   * @param db The database connection
+   * @return {boolean} If the operation was successful
+   */
+  public async sync(db: MysqlDb): Promise<void> {
+    const constructor = <typeof MysqlModel>this.constructor;
+
+    constructor._verifyFields(true);
+
+    if (!this[constructor._mysqlPrimaryKey]) {
+      return this._insert(db);
+    }
+
+    return this._update(db);
+  }
+
+  /**
+   * INSERTs the object into the database
+   *
+   * @param db
+   */
+  private async _insert(db: MysqlDb): Promise<void> {
+    const constructor = <typeof MysqlModel>this.constructor;
+    const { _mysqlFields, _mysqlPrimaryKey } = constructor;
+    const insertableFields: Array<string> = Object.keys(_mysqlFields)
+      .filter(field => field !== _mysqlPrimaryKey);
+
+    let query = `INSERT INTO \`${constructor._mysqlTable}\` `;
+    query += `(\`${insertableFields.map(field => _mysqlFields[field]).join('`, `')}\`) VALUES `;
+    query += `(${insertableFields.map(field => `:${field}`).join(', ')})`;
+
+    const result = await db.query(query, this);
+    this[_mysqlPrimaryKey] = result.insertId;
+  }
+
+  /**
+   * UPDATEs the database row to reflect the object model
+   *
+   * @param db The database object
+   */
+  private async _update(db: MysqlDb): Promise<void> {
+    const constructor = <typeof MysqlModel>this.constructor;
+    const { _mysqlFields, _mysqlPrimaryKey } = constructor;
+    const fields = Object.keys(_mysqlFields);
+    const updateableFields: Array<string> = fields.filter(field => field !== _mysqlPrimaryKey);
+
+    let query = `UPDATE \`${constructor._mysqlTable}\` SET `;
+    query += updateableFields.map(field => {
+      return `\`${_mysqlFields[field]}\` = :${field}`;
+    }).join(', ');
+    query += ` WHERE \`${_mysqlFields[_mysqlPrimaryKey]}\` = :${_mysqlPrimaryKey}`;
+
+    await db.query(query, this);
   }
 
   /**
@@ -87,7 +148,7 @@ export abstract class MysqlModel {
    */
   private static _createThisFromRow(row: any) {
     const retVal = this.create();
-    retVal.mysqlCopyFromRow(row, this._mysqlFields);
+    retVal.mysqlCopyFromRow(row);
     return retVal;
   }
 

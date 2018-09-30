@@ -3,7 +3,8 @@ import { Dictionary } from '../interfaces/common';
 
 export interface IQueryResult {
   rows?: Array<Dictionary<any>>;
-  fields: Array<mysql.FieldInfo>;
+  insertId?: number;
+  fields?: Array<mysql.FieldInfo>;
 }
 
 export class MysqlDb {
@@ -25,14 +26,28 @@ export class MysqlDb {
   }
 
   public async query(query: string, params?: Dictionary<any>): Promise<IQueryResult> {
+    const action: string = query.split(' ', 1).shift().toLowerCase();
+
     return new Promise<IQueryResult>((resolve, reject) => {
-      this._conn.query(query, params, (err, rows: Array<Dictionary<any>>, fields: Array<mysql.FieldInfo>) => {
+      this._conn.query(query, params, (err, result: any, fields: Array<mysql.FieldInfo>) => {
+        const retVal: IQueryResult = {};
+
         if (err) {
           reject(err);
           return;
         }
 
-        resolve({ rows, fields });
+        switch (action) {
+          case 'select':
+            retVal.rows = result;
+            retVal.fields = fields;
+            break
+          case 'insert':
+            retVal.insertId = result.insertId;
+            break;
+        }
+
+        resolve(retVal);
       });
     });
   }
@@ -45,6 +60,8 @@ export class MysqlDb {
     return query.replace(/\:(\w+)/g, (token: string, key: string) => {
       if (params.hasOwnProperty(key)) {
         token = this._conn.escape(params[key]);
+      } else {
+        token = 'NULL';
       }
       return token;
     });
