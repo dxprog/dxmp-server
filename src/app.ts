@@ -1,10 +1,10 @@
 import * as express from 'express';
 import * as http from 'http';
+import * as fileUpload from 'express-fileupload';
 
 import { IHttpConfig } from './interfaces/config';
 import { Controller } from './interfaces/controller';
 import { RouteMap, RouteHandler } from './interfaces/route';
-import { resolve } from 'url';
 
 const AVAILABLE_ROUTE_METHODS: Array<string> = [
   'all', 'get', 'post', 'update', 'delete'
@@ -22,6 +22,7 @@ export class App {
   constructor(options: IHttpConfig = DEFAULT_OPTIONS) {
     this.options = { ...options, ...DEFAULT_OPTIONS };
     this.app = express();
+    this.app.use(fileUpload());
     this.server = http.createServer(this.app);
   }
 

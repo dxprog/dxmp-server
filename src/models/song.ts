@@ -1,3 +1,5 @@
+import { IAudioMetadata } from 'music-metadata/lib/type';
+
 import { Dictionary } from '../interfaces/common';
 import { ISong } from '../interfaces/song';
 import {
@@ -40,5 +42,19 @@ export class SongModel extends MysqlModel implements ISong {
 
   public static create(): SongModel {
     return new SongModel();
+  }
+
+  public static createFromId3Tags(id3Data: IAudioMetadata): SongModel {
+    const { common } = id3Data;
+    const retVal = new SongModel();
+
+    retVal.createdAt = Date.now();
+    retVal.duration = Math.ceil(id3Data.format.duration);
+    retVal.title = common.title;
+    retVal.track = common.track.of;
+    retVal.disc = common.disk.of;
+    retVal.year = common.year;
+
+    return retVal;
   }
 }
