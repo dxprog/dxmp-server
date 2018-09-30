@@ -31,6 +31,6 @@ export class AlbumModel extends MysqlModel implements IAlbum {
   }
 
   public static create() {
-    return new this();
+    return new AlbumModel();
   }
 }

@@ -7,6 +7,7 @@ import {
   primaryKey
 } from '../lib/mysql-model';
 
+
 const FIELD_MAP: Dictionary<string> = {
   id: 'id',
   title: 'title',
@@ -37,7 +38,7 @@ export class SongModel extends MysqlModel implements ISong {
   public createdAt: number;
   public addedBy?: number;
 
-  public static create() {
-    return new this();
+  public static create(): SongModel {
+    return new SongModel();
   }
 }
