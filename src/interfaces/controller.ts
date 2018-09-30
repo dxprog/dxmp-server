@@ -1,5 +1,5 @@
-import { IRouteMap } from './route';
+import { RouteMap } from './route';
 
 export interface IController {
-  getRouteMap(): IRouteMap;
+  getRouteMap(): RouteMap;
 }

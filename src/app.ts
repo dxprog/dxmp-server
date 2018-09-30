@@ -1,7 +1,7 @@
 import * as express from 'express';
 
 import { IController } from './interfaces/controller';
-import { IRouteMap, RouteHandler } from './interfaces/route';
+import { RouteMap, RouteHandler } from './interfaces/route';
 
 const AVAILABLE_ROUTE_METHODS: Array<string> = [ 'all', 'get', 'post', 'update', 'delete' ];
 
@@ -13,7 +13,7 @@ export class App {
   }
 
   public addController(controller: IController) {
-    const routeMap: IRouteMap = controller.getRouteMap();
+    const routeMap: RouteMap = controller.getRouteMap();
     Object.keys(routeMap).forEach((routePath: string) => {
       const { app } = this;
       const routeTokens: Array<string> = routePath.split(':', 2);
