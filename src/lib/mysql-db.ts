@@ -43,7 +43,7 @@ export class MysqlDb {
     }
 
     return query.replace(/\:(\w+)/g, (token: string, key: string) => {
-      if (params.hasOwnProperty(token)) {
+      if (params.hasOwnProperty(key)) {
         token = this._conn.escape(params[key]);
       }
       return token;
