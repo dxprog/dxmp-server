@@ -34,14 +34,16 @@ export class App {
     const routeMap: RouteMap = controller.getRouteMap();
     Object.keys(routeMap).forEach((routePath: string) => {
       const { app } = this;
-      const routeTokens: Array<string> = routePath.split(':', 2);
+      const routeTokens: Array<string> = routePath.split(':');
       const routeMethod: string = routeTokens.length === 1 ? 'all' : routeTokens.shift();
-      const routeUrl: string = routeTokens.shift();
+      const routeUrl: string = routeTokens.join(':');
       const routeHandler: express.RequestHandler = this._handleRequest(routeMap[routePath]);
 
       if (!AVAILABLE_ROUTE_METHODS.includes(routeMethod)) {
         throw new Error(`Invalid route method: ${routePath}`);
       }
+
+      console.log('Setting up handler for: ', routeMethod.toUpperCase(), routeUrl);
 
       // Would prefer to: app[routeMethod](routeUrl, routeHandler);
       // Need to figure out how to TS that...
@@ -87,8 +89,14 @@ export class App {
    * @param handler The route handler to invoke
    */
   private _handleRequest(handler: RouteHandler): express.RequestHandler {
-    return (req: express.Request, res: express.Response): void => {
-      res.json(handler(req));
+    return async (req: express.Request, res: express.Response): Promise<void> => {
+      let data = null;
+      try {
+        data = await handler(req);
+      } catch (error) {
+        data = { error };
+      }
+      res.json(data);
     };
   }
 }
