@@ -1,5 +1,5 @@
 import * as mysql from 'mysql';
-import { Dictionary } from '../interfaces/common/dictionary';
+import { Dictionary } from '../interfaces/common';
 
 export interface IQueryResult {
   results: any;
