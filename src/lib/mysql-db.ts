@@ -2,8 +2,8 @@ import * as mysql from 'mysql';
 import { Dictionary } from '../interfaces/common';
 
 export interface IQueryResult {
-  results: any;
-  fields: any;
+  rows?: Array<Dictionary<any>>;
+  fields: Array<mysql.FieldInfo>;
 }
 
 export class MysqlDb {
@@ -26,13 +26,13 @@ export class MysqlDb {
 
   public async query(query: string, params?: Dictionary<any>): Promise<IQueryResult> {
     return new Promise<IQueryResult>((resolve, reject) => {
-      this._conn.query(query, params, (err, results: any, fields: any) => {
+      this._conn.query(query, params, (err, rows: Array<Dictionary<any>>, fields: Array<mysql.FieldInfo>) => {
         if (err) {
           reject(err);
           return;
         }
 
-        resolve({ results, fields });
+        resolve({ rows, fields });
       });
     });
   }

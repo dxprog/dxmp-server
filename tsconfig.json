@@ -6,7 +6,8 @@
     "declaration": true,
     "moduleResolution": "node",
     "module": "commonjs",
-    "typeRoots": [ "node_modules/@types" ]
+    "typeRoots": [ "node_modules/@types" ],
+    "experimentalDecorators": true
   },
   "files": [
     "./index.ts"
