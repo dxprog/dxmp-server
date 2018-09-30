@@ -1,7 +1,17 @@
 import { App } from './src/app';
+import { Controller } from './src/interfaces/controller';
 import { SongController } from './src/controllers/song';
 
-const app = new App();
-const songController = new SongController();
+interface ControllerPrototype {
+  new(): Controller
+};
 
-app.addController(songController);
+const ACTIVE_CONTROLLERS: Array<ControllerPrototype> = [
+  SongController
+];
+
+const app = new App();
+const activeControllers = ACTIVE_CONTROLLERS.forEach((ControllerClass: ControllerPrototype) => {
+  const controller = new ControllerClass();
+  app.addController(controller);
+});

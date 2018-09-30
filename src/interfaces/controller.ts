@@ -1,5 +1,7 @@
 import { RouteMap } from './route';
 
-export interface IController {
-  getRouteMap(): RouteMap;
+export abstract class Controller {
+  public getRouteMap(): RouteMap {
+    throw new Error('getRouteMap implementation missing');
+  }
 }

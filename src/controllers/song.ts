@@ -1,9 +1,9 @@
 import * as express from 'express';
 
-import { IController } from '../interfaces/controller';
+import { Controller } from '../interfaces/controller';
 import { RouteMap } from '../interfaces/route';
 
-export class SongController implements IController {
+export class SongController extends Controller {
   public getSongs(req: express.Request): any {
     return {};
   }
