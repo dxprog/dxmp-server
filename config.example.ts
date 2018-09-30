@@ -9,6 +9,13 @@ const APP_CONFIG: IAppConfig = {
   },
   http: {
     port: 4141
+  },
+  aws: {
+    accessKeyId: 'access-key',
+    secretAccessKey: 'secret-key',
+    bucket: 'dxmp',
+    songsPath: 'songs',
+    imagesPath: 'images'
   }
 };
 

@@ -4,6 +4,7 @@ import { Controller } from './src/interfaces/controller';
 import { SongController } from './src/controllers/song';
 import { AlbumController } from './src/controllers/album';
 import { MysqlDb } from './src/lib/mysql-db';
+import { S3 } from './src/lib/s3';
 
 import config from './config';
 
@@ -19,11 +20,13 @@ async function boot(appConfig: IAppConfig) {
   await db.connect(appConfig.mysql);
   console.log('Connected to database: ', appConfig.mysql.database);
 
+  const s3 = new S3(appConfig.aws);
+
   const app = new App(appConfig.http);
   const activeControllers = ACTIVE_CONTROLLERS.forEach(
     <T extends ControllerPrototype>(ControllerClass: T) => {
       console.log('Adding controller', ControllerClass.name);
-      const controller: Controller = ControllerClass.create(db);
+      const controller: Controller = ControllerClass.create(db, s3);
       app.addController(controller);
     }
   );

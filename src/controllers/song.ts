@@ -5,12 +5,21 @@ import * as mm from 'music-metadata';
 import { Controller } from '../interfaces/controller';
 import { RouteMap } from '../interfaces/route';
 import { MysqlDb } from '../lib/mysql-db';
+import { S3 } from '../lib/s3';
 import { SongModel } from '../models/song';
 import { IAudioMetadata } from 'music-metadata/lib/type';
 
 export class SongController extends Controller {
-  public static create(db: MysqlDb): SongController {
-    return new SongController(db);
+  private s3: S3;
+
+  constructor(db: MysqlDb, s3: S3) {
+    super(db);
+
+    this.s3 = s3;
+  }
+
+  public static create(db: MysqlDb, s3: S3): SongController {
+    return new SongController(db, s3);
   }
 
   public getRouteMap(): RouteMap {
@@ -36,6 +45,7 @@ export class SongController extends Controller {
       const id3Tags = await this._getId3Tags(songUpload.data);
       if (id3Tags) {
         song = SongModel.createFromId3Tags(id3Tags);
+        await song.sync(this.db, this.s3, songUpload.data);
       }
     }
     return song;

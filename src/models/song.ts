@@ -2,12 +2,14 @@ import { IAudioMetadata } from 'music-metadata/lib/type';
 
 import { Dictionary } from '../interfaces/common';
 import { ISong } from '../interfaces/song';
+import { MysqlDb } from '../lib/mysql-db';
 import {
   MysqlModel,
   tableName,
   fieldMap,
   primaryKey
 } from '../lib/mysql-model';
+import { S3 } from '../lib/s3';
 
 
 const FIELD_MAP: Dictionary<string> = {
@@ -42,6 +44,21 @@ export class SongModel extends MysqlModel implements ISong {
 
   public static create(): SongModel {
     return new SongModel();
+  }
+
+  /**
+   * Syncs the object to the database with the option of uploading an MP3
+   * to the S3 store.
+   *
+   * @param db The database object
+   * @param s3 The S3 object
+   * @param mp3Buffer The buffer to write to S3
+   */
+  public async sync(db: MysqlDb, s3?: S3, mp3Buffer?: Buffer): Promise<void> {
+    if (this.filename && s3 && mp3Buffer) {
+      await s3.uploadSong(this.filename, mp3Buffer);
+    }
+    return super.sync(db);
   }
 
   public static createFromId3Tags(id3Data: IAudioMetadata): SongModel {
