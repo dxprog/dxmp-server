@@ -29,3 +29,10 @@ export function createPerma(text: string): string {
   text = text.replace(/\s\s/g, ' ').replace(/\s/g, '-');
   return text.toLowerCase();
 }
+
+/**
+ * Returns whether an input is numeric
+ */
+export function isNumeric(val: any): boolean {
+  return val - 0 == val;
+}

@@ -54,8 +54,6 @@ export abstract class MysqlModel {
   public async sync(db: MysqlDb): Promise<void> {
     const constructor = <typeof MysqlModel>this.constructor;
 
-    constructor._verifyFields(true);
-
     if (!this[constructor._mysqlPrimaryKey]) {
       return this._insert(db);
     }
@@ -70,6 +68,9 @@ export abstract class MysqlModel {
    */
   private async _insert(db: MysqlDb): Promise<void> {
     const constructor = <typeof MysqlModel>this.constructor;
+
+    constructor._verifyFields();
+
     const { _mysqlFields, _mysqlPrimaryKey } = constructor;
     const insertableFields: Array<string> = Object.keys(_mysqlFields)
       .filter(field => field !== _mysqlPrimaryKey);
@@ -79,7 +80,10 @@ export abstract class MysqlModel {
     query += `(${insertableFields.map(field => `:${field}`).join(', ')})`;
 
     const result = await db.query(query, this);
-    this[_mysqlPrimaryKey] = result.insertId;
+
+    if (_mysqlPrimaryKey) {
+      this[_mysqlPrimaryKey] = result.insertId;
+    }
   }
 
   /**
@@ -89,6 +93,9 @@ export abstract class MysqlModel {
    */
   private async _update(db: MysqlDb): Promise<void> {
     const constructor = <typeof MysqlModel>this.constructor;
+
+    constructor._verifyFields(true);
+
     const { _mysqlFields, _mysqlPrimaryKey } = constructor;
     const fields = Object.keys(_mysqlFields);
     const updateableFields: Array<string> = fields.filter(field => field !== _mysqlPrimaryKey);
