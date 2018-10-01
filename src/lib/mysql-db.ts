@@ -3,6 +3,7 @@ import { Dictionary } from '../interfaces/common';
 
 export interface IQueryResult {
   rows?: Array<Dictionary<any>>;
+  hasContent?: boolean;
   insertId?: number;
   fields?: Array<mysql.FieldInfo>;
 }
@@ -41,6 +42,7 @@ export class MysqlDb {
           case 'select':
             retVal.rows = result;
             retVal.fields = fields;
+            retVal.hasContent = result.length;
             break
           case 'insert':
             retVal.insertId = result.insertId;
