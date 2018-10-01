@@ -1,5 +1,6 @@
 import { IAudioMetadata } from 'music-metadata/lib/type';
 
+import { IAlbum } from '../interfaces/album';
 import { Dictionary } from '../interfaces/common';
 import { ISong } from '../interfaces/song';
 import { MysqlDb } from '../lib/mysql-db';
@@ -9,6 +10,7 @@ import {
   fieldMap,
   primaryKey
 } from '../lib/mysql-model';
+import { createPerma } from '../lib/utils';
 import { S3 } from '../lib/s3';
 
 
@@ -61,17 +63,25 @@ export class SongModel extends MysqlModel implements ISong {
     return super.sync(db);
   }
 
-  public static createFromId3Tags(id3Data: IAudioMetadata): SongModel {
+  public static createFromId3Tags(id3Data: IAudioMetadata, filename: string, album: IAlbum): SongModel {
     const { common } = id3Data;
     const retVal = new SongModel();
 
     retVal.createdAt = Date.now();
     retVal.duration = Math.ceil(id3Data.format.duration);
+    retVal.albumId = album.id;
     retVal.title = common.title;
     retVal.track = common.track.of;
     retVal.disc = common.disk.of;
     retVal.year = common.year;
+    retVal.filename = retVal._cleanFileName(filename);
 
     return retVal;
+  }
+
+  private _cleanFileName(filename: string) : string {
+    const tokens = filename.split('.');
+    tokens.pop();
+    return `${createPerma(tokens.join('.'))}.mp3`;
   }
 }

@@ -8,6 +8,7 @@ import { MysqlDb } from '../lib/mysql-db';
 import { S3 } from '../lib/s3';
 import { SongModel } from '../models/song';
 import { IAudioMetadata } from 'music-metadata/lib/type';
+import { AlbumModel } from '../models/album';
 
 export class SongController extends Controller {
   private s3: S3;
@@ -41,10 +42,13 @@ export class SongController extends Controller {
   public async postSong(req: express.Request): Promise<any> {
     const songUpload: UploadedFile = <UploadedFile>req.files.songUpload;
     let song = null;
+    let album = null;
     if (songUpload) {
       const id3Tags = await this._getId3Tags(songUpload.data);
       if (id3Tags) {
-        song = SongModel.createFromId3Tags(id3Tags);
+        album = await AlbumModel.getById3Tags(id3Tags, this.db);
+        song = SongModel.createFromId3Tags(id3Tags, songUpload.name, album);
+        song.albumId = album.id;
         await song.sync(this.db, this.s3, songUpload.data);
       }
     }
@@ -54,4 +58,5 @@ export class SongController extends Controller {
   private async _getId3Tags(mp3Buffer: Buffer): Promise<IAudioMetadata> {
     return await mm.parseBuffer(mp3Buffer, 'audio/mpeg');
   }
+
 }
