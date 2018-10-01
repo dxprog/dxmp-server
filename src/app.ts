@@ -23,6 +23,7 @@ export class App {
     this.options = { ...options, ...DEFAULT_OPTIONS };
     this.app = express();
     this.app.use(fileUpload());
+    this.app.use(express.urlencoded());
     this.server = http.createServer(this.app);
   }
 
