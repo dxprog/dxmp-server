@@ -7,7 +7,7 @@ import { AlbumModel } from '../models/album';
 
 export class AlbumController extends Controller {
   public static create(db: MysqlDb): AlbumController {
-    return new this(db);
+    return new AlbumController(db);
   }
 
   public async getAlbums(req: express.Request): Promise<any> {
