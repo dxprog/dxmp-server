@@ -96,6 +96,8 @@ export class App {
         data = await handler(req);
       } catch (error) {
         data = { error };
+        console.error(error);
+        console.trace();
       }
       res.json(data);
     };
