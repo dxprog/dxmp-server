@@ -1,6 +1,6 @@
-import { RouteMap } from './route';
-import { MysqlDb } from '../lib/mysql-db';
-import { S3 } from '../lib/s3';
+import { RouteMap } from '../interfaces/route';
+import { MysqlDb } from './mysql-db';
+import { S3 } from './s3';
 
 export abstract class Controller {
   protected db: MysqlDb;

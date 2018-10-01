@@ -1,8 +1,8 @@
 import { App } from './src/app';
 import { IAppConfig } from './src/interfaces/config';
-import { Controller } from './src/interfaces/controller';
 import { SongController } from './src/controllers/song';
 import { AlbumController } from './src/controllers/album';
+import { Controller } from './src/lib/controller';
 import { MysqlDb } from './src/lib/mysql-db';
 import { S3 } from './src/lib/s3';
 

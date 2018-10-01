@@ -3,8 +3,8 @@ import * as http from 'http';
 import * as fileUpload from 'express-fileupload';
 
 import { IHttpConfig } from './interfaces/config';
-import { Controller } from './interfaces/controller';
 import { RouteMap, RouteHandler } from './interfaces/route';
+import { Controller } from './lib/controller';
 
 const AVAILABLE_ROUTE_METHODS: Array<string> = [
   'all', 'get', 'post', 'update', 'delete'

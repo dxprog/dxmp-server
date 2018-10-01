@@ -1,6 +1,6 @@
 import * as express from 'express';
 
-import { Controller } from '../interfaces/controller';
+import { Controller } from '../lib/controller';
 import { RouteMap } from '../interfaces/route';
 import { MysqlDb } from '../lib/mysql-db';
 import { AlbumModel } from '../models/album';
