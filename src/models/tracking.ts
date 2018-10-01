@@ -36,7 +36,7 @@ export class TrackingModel extends MysqlModel implements ITracking {
     retVal.songId = obj.songId;
     retVal.userId = obj.userId;
     retVal.type = obj.type;
-    retVal.createdAt = obj.createdAt || Date.now();
+    retVal.createdAt = obj.createdAt || retVal.createdAt;
     return retVal;
   }
 }
