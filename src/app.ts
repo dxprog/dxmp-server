@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as fileUpload from 'express-fileupload';
+import * as cors from 'cors';
 
 import { IHttpConfig } from './interfaces/config';
 import { RouteMap, RouteHandler } from './interfaces/route';
@@ -24,6 +25,7 @@ export class App {
     this.app = express();
     this.app.use(fileUpload());
     this.app.use(express.urlencoded());
+    this.app.use(cors());
     this.server = http.createServer(this.app);
   }
 
