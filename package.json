@@ -21,7 +21,7 @@
   "dependencies": {
     "aws-sdk": "^2.325.0",
     "cors": "^2.8.4",
-    "dxmp-common": "^1.0.0",
+    "dxmp-common": "^1.0.1",
     "express": "^4.16.3",
     "express-fileupload": "^1.0.0-alpha.1",
     "music-metadata": "^3.1.1",
