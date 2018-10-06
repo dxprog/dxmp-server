@@ -1,10 +1,9 @@
 import * as express from 'express';
+import { Dictionary, isNumeric } from 'dxmp-common';
 
-import { Dictionary } from '../interfaces/common';
 import { Controller } from '../lib/controller';
 import { RouteMap } from '../interfaces/route';
 import { MysqlDb } from '../lib/mysql-db';
-import { isNumeric } from '../lib/utils';
 import { TrackingModel } from '../models/tracking';
 
 export class TrackingController extends Controller {

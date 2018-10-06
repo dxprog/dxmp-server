@@ -1,13 +1,13 @@
 import * as express from 'express';
 import { UploadedFile } from 'express-fileupload';
 import * as mm from 'music-metadata';
+import { IAudioMetadata } from 'music-metadata/lib/type';
 
 import { RouteMap } from '../interfaces/route';
 import { Controller } from '../lib/controller';
 import { MysqlDb } from '../lib/mysql-db';
 import { S3 } from '../lib/s3';
 import { SongModel } from '../models/song';
-import { IAudioMetadata } from 'music-metadata/lib/type';
 import { AlbumModel } from '../models/album';
 
 export class SongController extends Controller {

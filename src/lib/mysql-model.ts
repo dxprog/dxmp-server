@@ -1,5 +1,5 @@
+import { Dictionary } from 'dxmp-common';
 import { MysqlDb } from './mysql-db';
-import { Dictionary } from '../interfaces/common';
 
 export abstract class MysqlModel {
   // Makes TS happy with the freeform keys in `mysqlCopyFromRow`

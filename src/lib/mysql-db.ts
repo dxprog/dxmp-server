@@ -1,5 +1,5 @@
+import { Dictionary } from 'dxmp-common';
 import * as mysql from 'mysql';
-import { Dictionary } from '../interfaces/common';
 
 export interface IQueryResult {
   rows?: Array<Dictionary<any>>;

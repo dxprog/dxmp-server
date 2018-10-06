@@ -1,5 +1,9 @@
-import { Dictionary } from '../interfaces/common';
-import { ITracking, TrackingType } from '../interfaces/tracking';
+import {
+  Dictionary,
+  ITracking,
+  TrackingType
+} from 'dxmp-common';
+
 import {
   MysqlModel,
   tableName,

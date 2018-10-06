@@ -1,8 +1,11 @@
 import { IAudioMetadata } from 'music-metadata/lib/type';
+import {
+  createPerma,
+  Dictionary,
+  IAlbum,
+  ISong
+} from 'dxmp-common';
 
-import { IAlbum } from '../interfaces/album';
-import { Dictionary } from '../interfaces/common';
-import { ISong } from '../interfaces/song';
 import { MysqlDb } from '../lib/mysql-db';
 import {
   MysqlModel,
@@ -10,7 +13,6 @@ import {
   fieldMap,
   primaryKey
 } from '../lib/mysql-model';
-import { createPerma } from '../lib/utils';
 import { S3 } from '../lib/s3';
 
 

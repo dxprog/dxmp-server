@@ -1,7 +1,6 @@
 import { IAudioMetadata } from 'music-metadata/lib/type';
+import { Dictionary, IAlbum } from 'dxmp-common';
 
-import { Dictionary } from '../interfaces/common';
-import { IAlbum } from '../interfaces/album';
 import { MysqlDb } from '../lib/mysql-db';
 import {
   MysqlModel,
