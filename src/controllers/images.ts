@@ -17,7 +17,8 @@ export class ImagesController extends Controller {
 
   public getRouteMap(): RouteMap {
     return {
-      'get:/images/art/:albumId.jpg': this.getAlbumArt.bind(this)
+      'get:/images/art/:albumId.jpg': this.getAlbumArt.bind(this),
+      'get:/images/wallpaper/:albumId.jpg': this.getAlbumWallpaper.bind(this)
     };
   }
 
