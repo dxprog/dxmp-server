@@ -96,7 +96,7 @@ export class App {
     return async (req: express.Request, res: express.Response): Promise<void> => {
       let data = null;
       try {
-        data = await handler(req);
+        data = await handler(req, res);
       } catch (error) {
         data = { error };
         console.error(error);

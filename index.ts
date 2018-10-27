@@ -3,6 +3,7 @@ import { IAppConfig } from './src/interfaces/config';
 import { AlbumController } from './src/controllers/album';
 import { SongController } from './src/controllers/song';
 import { TrackingController } from './src/controllers/tracking';
+import { ImagesController } from './src/controllers/images';
 import { Controller } from './src/lib/controller';
 import { MysqlDb } from './src/lib/mysql-db';
 import { S3 } from './src/lib/s3';
@@ -14,7 +15,8 @@ type ControllerPrototype = typeof Controller;
 const ACTIVE_CONTROLLERS: Array<ControllerPrototype> = [
   SongController,
   AlbumController,
-  TrackingController
+  TrackingController,
+  ImagesController
 ];
 
 async function boot(appConfig: IAppConfig) {
