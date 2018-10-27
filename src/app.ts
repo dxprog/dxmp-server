@@ -21,7 +21,7 @@ export class App {
   private options: IHttpConfig;
 
   constructor(options: IHttpConfig = DEFAULT_OPTIONS) {
-    this.options = { ...options, ...DEFAULT_OPTIONS };
+    this.options = { ...DEFAULT_OPTIONS, ...options };
     this.app = express();
     this.app.use(fileUpload());
     this.app.use(express.urlencoded());
